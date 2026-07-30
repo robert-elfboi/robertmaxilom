@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robert Maxilom — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#111111;
+    --muted:#767676;
+    --line:#e7e7e7;
+    --line-strong:#d5d5d5;
+    --hover:#f5f5f5;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{margin:0; font-weight:600; letter-spacing:-0.02em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+
+  /* ---------- TOP BAR ---------- */
+  header.top{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:24px 40px;
+    border-bottom:1px solid var(--line);
+  }
+  header.top .brand{font-weight:600; font-size:15px; letter-spacing:0.02em;}
+  header.top a.contact{
+    font-size:13px; color:var(--muted); text-decoration:none; border-bottom:1px solid var(--line-strong);
+    padding-bottom:1px;
+  }
+  header.top a.contact:hover{color:var(--ink); border-color:var(--ink);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    max-width:1200px; margin:0 auto;
+    padding:64px 40px 0;
+    text-align:center;
+  }
+  .hero h1{font-size:clamp(34px,5vw,56px); line-height:1.08;}
+  .hero p.tagline{
+    color:var(--muted); font-size:16px; max-width:520px; margin:20px auto 0; line-height:1.6;
+  }
+  .roles{display:flex; flex-wrap:wrap; gap:0; justify-content:center; margin-top:22px; color:var(--muted); font-size:13px; letter-spacing:0.03em;}
+  .roles span:not(:last-child)::after{content:'  ·  ';}
+
+  .slideshow{
+    width:100%; max-width:1200px; margin:48px auto 0;
+    aspect-ratio:21/9; border:1px solid var(--line-strong);
+    position:relative; overflow:hidden; background:#fafafa;
+  }
+  .slideshow img{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    opacity:0; transition:opacity 1.1s ease;
+  }
+  .slideshow img.active{opacity:1;}
+  .slide-caption{
+    position:absolute; bottom:16px; left:16px; z-index:2;
+    background:#fff; border:1px solid var(--line);
+    font-size:11px; color:var(--muted); letter-spacing:0.06em;
+    padding:7px 12px; text-transform:uppercase;
+  }
+  .slide-live{
+    position:absolute; top:16px; left:16px; z-index:2;
+    display:flex; align-items:center; gap:7px;
+    background:#fff; border:1px solid var(--line);
+    font-size:11px; color:var(--muted); letter-spacing:0.06em;
+    padding:7px 12px; text-transform:uppercase;
+  }
+  .slide-live::before{
+    content:''; width:6px; height:6px; border-radius:50%; background:#111;
+    animation:blink 2s infinite;
+  }
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
+  .slide-dots{
+    position:absolute; bottom:16px; right:16px; z-index:2;
+    display:flex; gap:6px;
+  }
+  .slide-dots span{
+    width:6px; height:6px; border-radius:50%; background:rgba(0,0,0,0.18);
+    transition:background .2s ease;
+  }
+  .slide-dots span.on{background:#111;}
+  @media (max-width:700px){ .slideshow{aspect-ratio:4/5;} }
+
+  /* ---------- BROWSE / FOLDERS ---------- */
+  .browse{
+    max-width:1200px; margin:0 auto; padding:40px 40px 80px;
+    border-top:1px solid var(--line);
+  }
+  .browse h2.label{
+    font-size:12px; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted);
+    margin-bottom:24px; font-weight:600;
+  }
+  .folder-grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .folder-card{
+    background:#fff; padding:22px 20px; display:flex; align-items:flex-start; gap:14px;
+    text-decoration:none; color:var(--ink); transition:background .15s ease;
+  }
+  .folder-card:hover{background:var(--hover);}
+  .folder-card svg{flex-shrink:0; width:26px; height:26px; margin-top:2px;}
+  .folder-card .name{font-size:14px; font-weight:600; line-height:1.35;}
+  .folder-card .meta{font-size:12px; color:var(--muted); margin-top:4px; font-family:'JetBrains Mono',monospace;}
+
+  /* ---------- SECTIONS ---------- */
+  .section{max-width:1200px; margin:0 auto; padding:64px 40px; border-top:1px solid var(--line);}
+  .section-head{display:flex; align-items:center; gap:12px; margin-bottom:28px;}
+  .section-head svg{width:20px; height:20px; flex-shrink:0;}
+  .section-head h2{font-size:20px;}
+  .section-head .count{color:var(--muted); font-size:12px; font-family:'JetBrains Mono',monospace; margin-left:auto;}
+
+  .grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px;
+  }
+  .thumb{
+    position:relative; aspect-ratio:1/1; overflow:hidden;
+    background:#fafafa; border:1px solid var(--line); cursor:pointer;
+  }
+  .thumb img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .35s ease, opacity .2s ease;}
+  .thumb:hover img{transform:scale(1.04);}
+
+  .media-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px;}
+  .media-card{border:1px solid var(--line); overflow:hidden;}
+  .media-card iframe{width:100%; height:210px; border:0; display:block; background:#000;}
+  .media-card .cap{padding:10px 14px; font-size:12px; color:var(--muted); font-family:'JetBrains Mono',monospace; border-top:1px solid var(--line);}
+
+  /* ---------- LIGHTBOX ---------- */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(255,255,255,0.97); z-index:100;
+    display:none; align-items:center; justify-content:center; padding:40px;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:90vw; max-height:85vh; border:1px solid var(--line-strong);}
+  .lightbox .close{
+    position:absolute; top:24px; right:32px; font-size:14px; color:var(--ink); cursor:pointer;
+    font-family:'JetBrains Mono',monospace; border:1px solid var(--line-strong); padding:6px 12px;
+  }
+  .lightbox .close:hover{background:var(--hover);}
+
+  footer{padding:48px 40px; text-align:center; color:var(--muted); font-size:12px; border-top:1px solid var(--line);}
+
+  @media (max-width:600px){
+    header.top{padding:18px 20px;}
+    .hero{padding:56px 20px 40px;}
+    .browse{padding:32px 20px 60px;}
+    .section{padding:48px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">ROBERT MAXILOM</div>
+  <a class="contact" href="#contact">Get in touch</a>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>Design that reads<br>the room.</h1>
+    <p class="tagline">A working archive of graphic design, photo editing, illustration, and layout — pulled straight from the studio drive.</p>
+    <div class="roles">
+      <span>GRAPHIC DESIGN</span><span>PHOTO EDITING</span><span>ILLUSTRATION</span><span>LAYOUT</span>
+    </div>
+  </div>
+
+  <div class="slideshow" id="slideshow">
+    <div class="slide-live">Playing random work</div>
+    <div class="slide-caption" id="slideCaption">—</div>
+    <div class="slide-dots" id="slideDots"></div>
+  </div>
+</section>
+
+<div class="browse">
+  <h2 class="label">Browse by folder</h2>
+  <div class="folder-grid" id="folderGrid"></div>
+</div>
+
+<div id="work"></div>
+
+<footer id="contact">
+  Built from a live Google Drive archive · 17 folders, updated as new work is added.
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <div class="close" id="lbClose">CLOSE ✕</div>
+  <img id="lbImg" src="" alt="">
+</div>
+
+<script>
+const folderIcon = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5C3 5.67 3.67 5 4.5 5h4.4c.32 0 .63.13.86.36L11 6.5H19.5c.83 0 1.5.67 1.5 1.5v9.5c0 .83-.67 1.5-1.5 1.5h-15C3.67 19 3 18.33 3 17.5v-11Z"/></svg>`;
+
+const drv = id => `https://drive.google.com/thumbnail?id=${id}&sz=w1400`;
+const drvSmall = id => `https://drive.google.com/thumbnail?id=${id}&sz=w500`;
+const drvEmbed = id => `https://drive.google.com/file/d/${id}/preview`;
+
+const categories = [
+  {slug:'photo-editing', label:'Photography / Photo Editing', type:'image', items:[
+    ['18NaRE9wxuPomA-4CZ0HYipkfOU6aokHo'],['1FtSBuYjyIlkxcbczii4nE1VbsTemCH71'],['1CzhwWnKCEYAN3kM_rxQEnHnyeT2wXEPw'],
+    ['1vrDt81CPvpPd4CONfANFY8WvbF5tLG9U'],['198R56G-1d9lwLMTS80As5nsE7DJmG8D9'],['17AXj-0aFPaFlzwme3xd_hKOEj1lYewec'],
+    ['1TaFTwy2O9P3RzF1Ws5bxtB5h8MPnapog'],['1SWzq-TqzVxl1TxSuPHaAGKlydM_qAM_B'],['1sMH8OPqDd79lH6_9KGtlUYT5irhoKesx'],
+    ['1KSvJSfF4o2tSstAIPhDG0Zs15ndcxmRw'],['14Znik55Jq2ZZdl-qIp_s-tC4zPnkJZaO'],['1edjA7iysbU8I6VxL61VyxWMJ_8uyi936'],
+    ['1U_NLoWdcb8HhgfypEd1V838ikdoOwZhn'],['125tDdl5VJuM98TT7mYYgX_t17Mx4gnO1'],['1KaRSnXpRfzcHmu7dLLI5OZ1Px2VX3Z7H'],
+    ['1vuGa3oX4fc8VAW_3jBwlzDE9JWOqVFWY'],['1lNNI2NSZt2kVCc8fefsrxp-tEvT44GAX'],['1tSmh_BesHQk0f4V-ZaHKZEJWeigNTAM9'],
+    ['1NpOXV9-XcCok44nk27sL-ivprWhanHGc'],['1OEnbOQUMeUw2z3LFDYxi4wSJMpURqKVL'],['1orC6u2lJno1rpFDonwEVuiRTVO_v1c1V'],
+    ['15aUgua2JWbjz9QTnTKzrcOxKUTkicOgx'],['1vMyRW1nBUE5ckEm-kMyitKdjOtCOZ1or'],['16a1D11bgRdLi3OZUxajG2wSfojcFDxSv'],
+    ['1BYQumYvnD_H9EsAWoXOX-tS4NiL9EVv6'],['1wm1iVTfFYLUVh6aWyF9kvPRqiTwq6ZSU'],['19jveUqc5zFs1Y0b_9LzZAFmfWXAi6CHM'],
+    ['1514ibR_IKhrfaVpwTKGBwGQsGQ_5nahO'],['1CUzhkjGgbv4gtpcyGEGsOkiU0IMlsKuK'],['12EMAtVJxNZrf_eWRzlKJR-v1zqcJNknh'],
+    ['108go0YSTniuQKp8x2xQJZugiK5chjLv8']
+  ]},
+  {slug:'ai-photoshop', label:'AI + Photoshop', type:'image', items:[
+    ['1Q6Cr7wvRKRpQJVfg3TimpyvDIztHVskf'],['1LouILoydUnp1QHR_EjG27XUzZAJThJTm'],['1lOseErICuhB7mQg-GZEDFkmKI3g_WikT'],
+    ['1PBi0fEwMavxUhlyCq87Ti5MebZWbMnjO'],['1cpmw-DgYlqR_QA-tRgIPMCqrQrmQFBd6'],['19RXeo9z9nnBXMWPA7mplzhuW0aChuIr6'],
+    ['1APoixxVpjvH3ey5WSHtsB0b1FFWifnxd'],['1iVAgovRQ3_EccLaCoJXh5xkv-40RlaYv'],['1deeXUqy7w99PshlqVYoRhypbPxbi-Crn']
+  ]},
+  {slug:'original-artworks', label:'Original Artworks', type:'image', items:[
+    ['1sno4v_PhtI7GPlrcnHXtGL-TjD7gQSLW'],['1WKDtGyoyrp-VQuts2T484WUceqPXUBaz'],['1YzP3Jaqh0rUsywlidTzUc6tkGK6bmFml'],
+    ['1dXM4a_LBu9A-bZqsfTmNq40ENFZITA2z'],['1Txxho0e3oo6QsEWjpifzaHD-rEHm9UaM'],['1xndg9IC2dnOCYGTWOkO2X5EamYFw-9C4'],
+    ['1bCn-gj2BrOtQm6r3QyWST6X2sr8_r2W3'],['1iYzeA5sFKYV_imedyJSc1sD39MdoJHGR'],['1fTMlLvKb9PoZh9_1seW9yZQXj-lF-7zk'],
+    ['1j2MqbRFIYGdTUHM3UbMRop8rid1GSc6e'],['1omdTm2XxOkBlFHQvUvWbliWbz36OsZgI'],['1JWLQ4SZCHvDFf5q59sXkmtBpXVtQcMLO'],
+    ['1t-mIcJpOsNWgjlxsyriDK6pB56yiF5af']
+  ]},
+  {slug:'poster-menu-brochure', label:'Poster, Menu, Brochure', type:'image', items:[
+    ['1mQfHx-PCm14BelBM8Tt_C45DKHxWYR1y'],['1kdJ9_upptkkMJN1JyxL3xTzaWxr6wTLV'],['1yy1RkeGxf1UPmrXIBsSEO_OwYRSnt_yS'],
+    ['1JrbQDwOGQT0HvAUmLJ0oIgUVRJD62jIE'],['1587DBWCqgQVOaSNZ4GpsdDT3lSz1yrMR'],['1z84z_W5YHbn18ceu9dpXwWbmlJRz95Az'],
+    ['1cERET8IVz7MdQUELY1Ebkb3dz55EbKo7'],['1B_Rji5BrGKgtmqMPtiRczIfMgqUWKQU0'],['1aPhSv7NSwiSxuULfC9BDpnRJwMpzIuFe'],
+    ['15L1BakA7keKTx1gEQrJ-d0McNOylMle0']
+  ]},
+  {slug:'ecommerce-mockup', label:'E-commerce Mockup Design', type:'image', items:[
+    ['1PbGTJbykbW1tYqE1fTHqrYI0KG5cZQTR'],['1q_ygM-ZwYiAB6POc5S2_gIqr-JbtXiI2'],['15lIyOcgP-nESDYFgGr8yAZyQmi6tqyj7'],
+    ['18xNsWakzqYpCmjeqG95_QXZYCT0BXhJ6'],['1qr87MPhjgQ6ekLZqX1cq87-xxqZRVk3K'],['1Egt9VYwGp-bgWSdWaabnTYFlsm6XsicV'],
+    ['1ZK9fZ6SS3ObtniCx3DQ0rQJ_XB4S54Fv'],['18ZVZt7ZI0FSLATVolYUIHZawF8cb8FF3'],['1N8Oy55ByPBSlJV5tpgINgtSQrLJHh3SH'],
+    ['1gVvYYQlCFd7g2ZjLx_WWAvUPmgeTP2GH'],['1pByVidA2UmI3Qt7Ti02-xCXH2eTYzplb'],['1hSU-zU2Kxcp4OSz89v-OuJWAiHLNs6i0'],
+    ['1e3nZ3_aGtSdXIj-ZmQhRbdJXR0ImvOWK'],['1fJl_m29cEBAs-Ky67tO-utxfl1CnOg-T'],['1sa05TlFzXiX13IUUVM3MWXMpTmjDLidg'],
+    ['17qpY3v9SpsWIC0605dnTUXyFRkjfVMZQ'],['1hyvBwm0D49d1xZUNf6bJujpGHnMfkLf8'],['1XD5R1UuMY7iywakRlXpoQ4bITZpXXzrj'],
+    ['1dk1FJay8YsrSlPx-PkAS9Ny2G21nEr1N'],['1iPvpfkozx5b6hU9DzPdlnxmGAzuMQFqC'],['1eNPU15PQqP_xGaSHfoazKP_kJKuF8NMc'],
+    ['1bER880ibY4e_7C8m8Dv9UUwYgWWU94ZL'],['1pcZHogXCVnv6ChXtO7dpn5Ig4Wt1BEGH'],['18m5FO28fcoJlxHf0UP1pz8cw6S_oyzBO'],
+    ['1QAl4gkIB_9ZaggNZ4jRjeSGy8GIshpSl'],['1MPwLmGGzqVCr7LbLrAFaazuPvvGwWgQD'],['1emeZ418Ce-EYchXnPY8DcRqnmg_KJfBm'],
+    ['1DvikWpIHdqcdprhDtmvhSi1kcIHTXbva'],['1dF9BgcpDSVLUVplNigin_NSNB8kJ1yWg'],['1mWUTBW2KIAyYjNceowTVHzmn1zHdYuZC'],
+    ['1ILWP0SUjUsnh5svVTny4-AX25jEVt00W'],['1Y5ve2DW8eHcT016suCtJ2Xu3s70ZQor4'],['1bA3LaoOkRaSlJwdmsLPJ4-gtb_9Sy_Rj'],
+    ['174oTeCyomZ4xQ8lsTDNrDbhLhwmqwaP-'],['1e99AQNM2bwtQjzgk8hGxac38rl2hYEBc'],['15x26vV-HppWIxm9MkIo4vPcTlyduE5ik'],
+    ['1irPGGkKkvTIT9lZ908y5YSVJlZaApk-U'],['1Z5fxBZ0Hk4ia1R1Ed2qHlMpNj4mt7txU'],['1ianpJh-F6nDsc2s0iSmMdXHRFdwSOeWX'],
+    ['1fIHZVWWli6YctLQzc1NRm7hv9IOPKwMI'],['1ry0R_wf-nYkLWPZlBkZdbsVeBEBx5crz'],['1z_R-zsXAIO6gPyXlh9BvSOgKFkvA_jns'],
+    ['1GAeCG45got_Ga1KpeS2Ee-4zHiRc_SlU'],['11L9EXOISWMdQYI_AY_LlKPZ6R4LAkOyH']
+  ]},
+  {slug:'graphic-design', label:'Graphic Design', type:'image', items:[
+    ['1T36HGwnSEgkaDYonvlLQwXlYV1SoJun6'],['1MKgcaTyW1_mXGksOZVJy_XxczrP1ZWz8'],['1XVs5CPHDYHiZbw0qHeg3F_-FoMJ2EYuE'],
+    ['1FjKUXcoKLN9pLLrtI2hBmSOvtREGPj0d'],['1ifj3zwaoO2gr8W9JnelP0G_YpzE8Cg1g'],['1FaPG6bEZY9PA6QzHbyzRxToRMxO_X-he'],
+    ['1ZHMaEhYvcFFFLXsut1os3Xed5vgi3dbF'],['1U4hf7LraNu5RVnDn-3L5jviTLTpAtaOq'],['1s_5CfEouqLoGU_vP05G2MYCr4MDTX9-m'],
+    ['1C9MmJvnOgBbDg3YQA14dItGH9J2iT-nB'],['1clF4pt5ASb3cowjISc9wIIyAKeJutqlg'],['1tirnsvVJdyj0dZHQHRz4SRrlxJH7AK2J'],
+    ['1Q0qHSAEQHyOQdKIkgkUcp9amx4CclyQj']
+  ]},
+  {slug:'garden-cafe', label:'Garden Cafe Product Shots / Photo Editing', type:'image', items:[
+    ['1gkNkHwU3zoj4k8Do8_yYL_84w8wblMON'],['1Uipco1uFlhVjTLD2p0SQn7KorhIqB4Sq'],['1KZvrZzKMcM4jHntAmIJfnEdwhhz30hwK'],
+    ['1uhpA_qCqQYZepwO9fM59-I69AH1ughVW'],['15sqtA84NZ3fGC9-OYTWMrVtzILM6QEIZ'],['1_HgC9cc6OQhcuqdU1mbGq2g0yyT3Jop9'],
+    ['1G0ArWGY9cPO6Y5t8fYHseCXFkASE6Plt'],['1F1RhQt8dYDy0Rwy8tYWoUSllDd_5h4tp'],['1NtPdS6_C4e7NUncEt1JY53jyRDWNFLVe'],
+    ['1ED8PLSEJ3aKV5IRFu8mygwQeRE3dY7DS'],['19U7YgL7ckbLRKAkYmTND3p_0CHQpBN6b'],['10lYGI1_kpaVh2ZIU9ZxJrWRwEADefzkM'],
+    ['1eWFF-ag1RIUW8AzJNTZRtVuHq8e619KX'],['1jKRy13ttpBXGi87wIkqjyY5_3W4RZ3wQ'],['1VjuVkKVCIvMcpv2rYWlvZE8OlYkQARdK'],
+    ['10SThIUbaD6f0aPbaKAoXsFS_UvBq2qct'],['1Bz2LgiVwJ_anpZwKjNRKiuCsy5g3PCQe'],['1M_4g6hBKwaqIpbImXX56ztQl8BbAd-cx'],
+    ['1JS4cl-U6x4hk-qPtlSVUwHHJIywwZchj'],['1H0RCsFZq4grkwO0EbS2qAC7zmD8g1eq6'],['1NjgXlmXH3wW-7aIvMpn4fE3oJ9_IkLKa'],
+    ['1yO29TrX4tVbocYTw4rDlxewdxIOGfNsB'],['1rWMqTyyL4z94IfiWyYm3zqZydASqK-q2']
+  ]},
+  {slug:'real-estate', label:'Real Estate Photo Editing & Floor Planning', type:'image', items:[
+    ['1TkyY6aOrbT7V8NNzUEDLV62rdJP5sdFL'],['1IGHkGNCVjyovEuEuZm4CaTG983CmLKYx'],['1JZXa9JKkMT73MaLs_0HlMR_q4OqbMZoR'],
+    ['1FgXBh-hgzaDoaZdEv0CXo5EW1o3zf-Ey'],['1Q1ZnxVQMFlP1_v9I2lHq2HKKF0kvrnwv'],['1NfNMqCyG2udVhmIWxEaWmcsWGArwqczh']
+  ]},
+  {slug:'product-mockup', label:'Product Mockup Design', type:'image', items:[
+    ['1IP-vuYe76JdQqwqYtVIPL9XuBjn1VS8u'],['18JyIkpGfCraRHtlzBvN-XTn-ncPtY4Mj'],['1lHvUdZWTZejjAehOBQ_u2Seh8oBLuH_3'],
+    ['1a1aY5gyX1J4DncI9CxwjYXw3OM-CrnrE'],['1-6zIEzcEYMGv1FJv_FfsGVNmCHfyCtkK'],['1DmiIZ_V7exohv_VgVuf-66LN-De1IfxQ'],
+    ['1PHrgaOUONjcvbs7pIWC8lXGvR2z6C5BS'],['1-KuEHUVGQLoGr8-fGYOTP90nULCjVZ7T'],['1mo8Pnu3qW6tlChT8zqSC6z8JSzFml_8I'],
+    ['1GGsdDcDUspoewQoO_k8VlqLo2UlEmviU']
+  ]},
+  {slug:'youtube-thumbnail', label:'YouTube Thumbnail', type:'image', items:[
+    ['1DlHIc270wrYEBe52iJn85goqiau7QO_A'],['1vmKgsA3yfV8D0WTlZdYLsDoeDnA9HBHr']
+  ]},
+  {slug:'mockup-design', label:'Mock Up Design', type:'image', items:[
+    ['1CWGNwtkCjp-U0suX2O2lsLAitukh8K2Z'],['116cU_sz1EHpDV3u8Fz9Xa-EesX3oW7w7'],['1CqwER1rabTO3nrG5nBQgjgpHBYLayvV2'],
+    ['1c4dOS8eI6NJN2lsyUSbsvW7Hob9z5_Ce'],['1Z5Ye4yC0mddxV3TCppGh0btFRekkrsfO'],['1AEH_2HMI6Dn73iP7jO9lGup5m9UFfGv3'],
+    ['1YP6yxemoXT6BIcHKJbZvJPE4KTL2PgAQ'],['1G71LcYC6YmfmRpuTeWnGbaalEbyp71LQ'],['1YK4ci6Bu4dcFc58NHwCFfreuwAdp9Osk'],
+    ['1NJ_zEpBBW1Q8efJbex-14vYtkO5gLQse']
+  ]},
+  {slug:'logo-design', label:'Logo Design', type:'image', items:[
+    ['1mpDXUdjnNns3btkk1IOs3iMnGjfCq7o2'],['1MVqW8hA5jR2vv_qnAe_BECctF2JNhe-Y'],['1uJhjKOY0qZTCsdHlHk-XZnEuZC5fShxP'],
+    ['1aHwCmHn0sl-rbw55-fvIN_FCCuVWoWOu']
+  ]},
+  {slug:'short-form-video', label:'Short-Form Video Editing', type:'video', items:[
+    ['1-EjhgHT9Bb9hd8Rkrg6DWobv4q_a4OTN','clip 3'],['1ixZgxB39EKjSYmqMVH7Ae5n8wbh7C_Yl','clip 2'],['1SIx8Fwzo2hAfbZVbJNh0MVNDQy02ZDTR','clip 1']
+  ]},
+  {slug:'video-editing', label:'Video Editing', type:'video', items:[
+    ['1atdHwI--Vi0YprAdrs8rvv6ypOBOdRmy','Deep Science'],['1QyGNsyRiF4rJrJKdYyw20q7ZndIRNKz2','The Green Sahara']
+  ]},
+  {slug:'animation', label:'Animation', type:'video', items:[
+    ['1Mv_wi93skHWYPZVZiPX1b7V9wrcucFEP','Screen Recording'],['14ufF5GZVNgoUuvCYCkx0xQRNzrhVxuXE','Robert Animation'],['1inU2ev6ZGS0fgMH_gpYftgyB9Wk9Nfrx','Strap Poster Video']
+  ]},
+  {slug:'layouting', label:'Layouting', type:'pdf', items:[
+    ['16ySIY2whXEKK6TURc6GZxDDFxr0U5t_o','My Grandma (paperback)'],['1B1ZPmnQ6gnejFQ5Zq5y9xGO7Aq4FEb9v','Royalty'],['1XO4DErTQaXtaQgflc6SlDw0vZQJi11P4','SFWF 2026 Program']
+  ]},
+  {slug:'childrens-book', label:"Children's Book Illustration", type:'pdf', items:[
+    ['1xNCVhV5Zc4-QMRwNw85eZ0P5cFM3VAUI','My Grandma (paperback)'],['1_FyzU_UPwJx7DZ7f1XHVcZUrjmqTr-QT','Royalty']
+  ]}
+];
+
+/* -------- build folder grid + sections -------- */
+const folderGrid = document.getElementById('folderGrid');
+const work = document.getElementById('work');
+
+categories.forEach((cat, i)=>{
+  const card = document.createElement('a');
+  card.className='folder-card'; card.href='#'+cat.slug;
+  card.innerHTML = `${folderIcon}<div><div class="name">${cat.label}</div><div class="meta">${cat.items.length} ${cat.type==='image'?'files':cat.type==='video'?'videos':'pdfs'}</div></div>`;
+  folderGrid.appendChild(card);
+
+  const section = document.createElement('section');
+  section.className='section'; section.id=cat.slug;
+
+  let inner = `<div class="section-head">
+      ${folderIcon}
+      <h2>${cat.label}</h2>
+      <span class="count">${cat.items.length} ${cat.type==='image'?'IMAGES':cat.type==='video'?'VIDEOS':'FILES'}</span>
+    </div>`;
+
+  if(cat.type==='image'){
+    inner += '<div class="grid">' + cat.items.map(it=>`
+      <div class="thumb" data-full="${drv(it[0])}">
+        <img loading="lazy" src="${drvSmall(it[0])}" alt="${cat.label}">
+      </div>`).join('') + '</div>';
+  } else {
+    inner += '<div class="media-grid">' + cat.items.map(it=>`
+      <div class="media-card">
+        <iframe src="${drvEmbed(it[0])}" allow="autoplay" allowfullscreen></iframe>
+        <div class="cap mono">${it[1]||''}</div>
+      </div>`).join('') + '</div>';
+  }
+
+  section.innerHTML = inner;
+  work.appendChild(section);
+});
+
+/* -------- lightbox -------- */
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+document.querySelectorAll('.thumb').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    lbImg.src = t.dataset.full;
+    lightbox.classList.add('open');
+  });
+});
+document.getElementById('lbClose').addEventListener('click', ()=>lightbox.classList.remove('open'));
+lightbox.addEventListener('click', e=>{ if(e.target===lightbox) lightbox.classList.remove('open'); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') lightbox.classList.remove('open'); });
+
+/* -------- random hero slideshow -------- */
+const imagePool = [];
+categories.filter(c=>c.type==='image').forEach(c=>{
+  c.items.forEach(it=> imagePool.push({id:it[0], cat:c.label}));
+});
+
+const slideshow = document.getElementById('slideshow');
+const slideCaption = document.getElementById('slideCaption');
+const slideDots = document.getElementById('slideDots');
+let currentImg = null;
+let dotIndex = 0;
+const DOT_COUNT = 5;
+for(let i=0;i<DOT_COUNT;i++){
+  const d = document.createElement('span');
+  slideDots.appendChild(d);
+}
+
+function nextSlide(){
+  const pick = imagePool[Math.floor(Math.random()*imagePool.length)];
+  const img = document.createElement('img');
+  img.src = drv(pick.id);
+  slideshow.insertBefore(img, slideshow.firstChild);
+  requestAnimationFrame(()=> img.classList.add('active'));
+  slideCaption.textContent = pick.cat;
+
+  [...slideDots.children].forEach((d,i)=> d.classList.toggle('on', i===dotIndex));
+  dotIndex = (dotIndex+1) % DOT_COUNT;
+
+  if(currentImg){
+    const old = currentImg;
+    setTimeout(()=>{ old.classList.remove('active'); setTimeout(()=>old.remove(), 1100); }, 3000);
+  }
+  currentImg = img;
+}
+nextSlide();
+setInterval(nextSlide, 4000);
+</script>
+</body>
+</html>
