@@ -56,11 +56,14 @@
 
   .slideshow{
     width:100%; max-width:1200px; margin:48px auto 0;
-    aspect-ratio:21/9; border:1px solid var(--line-strong);
+    min-height:280px; max-height:78vh;
+    border:1px solid var(--line-strong);
     position:relative; overflow:hidden; background:#fafafa;
+    display:flex; align-items:center; justify-content:center;
   }
   .slideshow img{
-    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    position:absolute; max-width:100%; max-height:78vh; width:auto; height:auto;
+    object-fit:contain;
     opacity:0; transition:opacity 1.1s ease;
   }
   .slideshow img.active{opacity:1;}
@@ -295,6 +298,11 @@ const categories = [
   {slug:'logo-design', label:'Logo Design', type:'image', items:[
     ['1mpDXUdjnNns3btkk1IOs3iMnGjfCq7o2'],['1MVqW8hA5jR2vv_qnAe_BECctF2JNhe-Y'],['1uJhjKOY0qZTCsdHlHk-XZnEuZC5fShxP'],
     ['1aHwCmHn0sl-rbw55-fvIN_FCCuVWoWOu']
+  ]},
+  {slug:'social-media-post', label:'Social Media Post', type:'image', items:[
+    ['135fLgjG6F5aKlWeRtJ6k8NOzEqnlISU0'],['12wuzY1_z3JlQAoQrW_CwAdgjeqEBElC0'],['1cZ7C2IVqfjV1yDK64RG5DXH4CvB05aVe'],
+    ['1dPocBVZTFAabMfns4pp6Srd5s2W98t5A'],['1eWteUnCyhmkcbeGnz5CTzNip0j9HJBVN'],['1PdNU1P-uk8wWBOaJcG75U2O1Ms3siGfO'],
+    ['1S_oq_GReaW6ZzA-Nx8CGO0i2s1BnSq73'],['1shl-3ILOWXEzLQfit0Ll5omHvcS83vpk'],['16dsiDUW-FIQaIuEm7GdPQwtbpPem7u97']
   ]},
   {slug:'short-form-video', label:'Short-Form Video Editing', type:'video', items:[
     ['1-EjhgHT9Bb9hd8Rkrg6DWobv4q_a4OTN','clip 3'],['1ixZgxB39EKjSYmqMVH7Ae5n8wbh7C_Yl','clip 2'],['1SIx8Fwzo2hAfbZVbJNh0MVNDQy02ZDTR','clip 1']
