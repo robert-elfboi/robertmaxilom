@@ -37,7 +37,7 @@
   header.top .brand{font-weight:600; font-size:15px; letter-spacing:0.02em;}
   header.top a.contact{
     font-size:13px; color:var(--muted); text-decoration:none; border-bottom:1px solid var(--line-strong);
-    padding-bottom:1px;
+    padding-bottom:1px; display:inline-flex; align-items:center; gap:6px;
   }
   header.top a.contact:hover{color:var(--ink); border-color:var(--ink);}
 
@@ -187,7 +187,10 @@
 
 <header class="top">
   <div class="brand">ROBERT MAXILOM</div>
-  <a class="contact" href="#contact">Get in touch</a>
+  <a class="contact" href="mailto:robertmaxilom@gmail.com">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 7 9-7"/></svg>
+    robertmaxilom@gmail.com
+  </a>
 </header>
 
 <section class="hero">
