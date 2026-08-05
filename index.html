@@ -145,6 +145,20 @@
   .media-card{border:1px solid var(--line); overflow:hidden;}
   .media-card iframe{width:100%; height:210px; border:0; display:block; background:#000;}
   .media-card .cap{padding:10px 14px; font-size:12px; color:var(--muted); font-family:'JetBrains Mono',monospace; border-top:1px solid var(--line);}
+  .media-thumb{
+    position:relative; height:210px; background:#f2f2f2; cursor:pointer; overflow:hidden;
+  }
+  .media-thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .media-thumb .play-badge{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.15);
+  }
+  .media-thumb .play-badge span{
+    width:52px; height:52px; border-radius:50%; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 14px rgba(0,0,0,0.25);
+  }
+  .media-thumb .play-badge svg{width:18px; height:18px; margin-left:2px;}
 
   /* ---------- LIGHTBOX ---------- */
   .lightbox{
@@ -178,8 +192,8 @@
 
 <section class="hero">
   <div>
-    <h1>Bringing ideas to life<br>through art and design.</h1>
-    <p class="tagline">A working archive of graphic design, photo editing, illustration, and layout pulled straight from the studio drive.</p>
+    <h1>Design that reads<br>the room.</h1>
+    <p class="tagline">A working archive of graphic design, photo editing, illustration, and layout — pulled straight from the studio drive.</p>
     <div class="roles">
       <span>GRAPHIC DESIGN</span><span>PHOTO EDITING</span><span>ILLUSTRATION</span><span>LAYOUT</span>
     </div>
@@ -352,7 +366,10 @@ categories.forEach((cat, i)=>{
   } else {
     inner += '<div class="media-grid">' + cat.items.map(it=>`
       <div class="media-card">
-        <iframe src="${drvEmbed(it[0])}" allow="autoplay" allowfullscreen></iframe>
+        <div class="media-thumb" data-embed="${drvEmbed(it[0])}">
+          <img loading="lazy" src="${drvSmall(it[0])}" alt="${it[1]||cat.label}">
+          <div class="play-badge"><span><svg viewBox="0 0 24 24" fill="#111"><path d="M8 5v14l11-7z"/></svg></span></div>
+        </div>
         <div class="cap mono">${it[1]||''}</div>
       </div>`).join('') + '</div>';
   }
@@ -373,6 +390,22 @@ document.querySelectorAll('.thumb').forEach(t=>{
 document.getElementById('lbClose').addEventListener('click', ()=>lightbox.classList.remove('open'));
 lightbox.addEventListener('click', e=>{ if(e.target===lightbox) lightbox.classList.remove('open'); });
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') lightbox.classList.remove('open'); });
+
+/* -------- click-to-load video/pdf players (avoids loading many heavy iframes at once) -------- */
+document.querySelectorAll('.media-thumb').forEach(thumb=>{
+  thumb.addEventListener('click', ()=>{
+    const iframe = document.createElement('iframe');
+    iframe.src = thumb.dataset.embed;
+    iframe.allow = 'autoplay';
+    iframe.allowFullscreen = true;
+    iframe.style.width = '100%';
+    iframe.style.height = '210px';
+    iframe.style.border = '0';
+    iframe.style.display = 'block';
+    iframe.style.background = '#000';
+    thumb.replaceWith(iframe);
+  });
+});
 
 /* -------- random hero slideshow -------- */
 const imagePool = [];
