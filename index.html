@@ -56,24 +56,30 @@
 
   .slideshow{
     width:100%; max-width:1200px; margin:48px auto 0;
+    height:min(1080px, 72vh);
     border:1px solid var(--line-strong);
-    position:relative; background:#fafafa;
-    display:grid;
+    position:relative; overflow:hidden; background:#fafafa;
   }
-  .slideshow img{
-    grid-area:1/1;
-    width:100%; height:auto; display:block;
-    opacity:0; transition:opacity 1.1s ease;
+  .slide{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    transform:translateX(100%);
+    transition:transform .9s cubic-bezier(.65,0,.35,1);
   }
-  .slideshow img.active{opacity:1;}
-  .slide-caption{
+  .slide.active{transform:translateX(0);}
+  .slide.exit{transform:translateX(-100%);}
+  .slide img{
+    max-width:100%; max-height:100%; width:auto; height:auto;
+    object-fit:contain; display:block;
+  }
+  .slide .slide-caption{
     position:absolute; bottom:16px; left:16px; z-index:2;
     background:#fff; border:1px solid var(--line);
     font-size:11px; color:var(--muted); letter-spacing:0.06em;
     padding:7px 12px; text-transform:uppercase;
   }
   .slide-live{
-    position:absolute; top:16px; left:16px; z-index:2;
+    position:absolute; top:16px; left:16px; z-index:3;
     display:flex; align-items:center; gap:7px;
     background:#fff; border:1px solid var(--line);
     font-size:11px; color:var(--muted); letter-spacing:0.06em;
@@ -85,7 +91,7 @@
   }
   @keyframes blink{0%,100%{opacity:1;}50%{opacity:.25;}}
   .slide-dots{
-    position:absolute; bottom:16px; right:16px; z-index:2;
+    position:absolute; bottom:16px; right:16px; z-index:3;
     display:flex; gap:6px;
   }
   .slide-dots span{
@@ -93,7 +99,7 @@
     transition:background .2s ease;
   }
   .slide-dots span.on{background:#111;}
-  @media (max-width:700px){ .slideshow{aspect-ratio:4/5;} }
+  @media (max-width:700px){ .slideshow{height:min(600px, 60vh);} }
 
   /* ---------- BROWSE / FOLDERS ---------- */
   .browse{
@@ -181,7 +187,6 @@
 
   <div class="slideshow" id="slideshow">
     <div class="slide-live">Playing random work</div>
-    <div class="slide-caption" id="slideCaption">—</div>
     <div class="slide-dots" id="slideDots"></div>
   </div>
 </section>
@@ -376,9 +381,8 @@ categories.filter(c=>c.type==='image').forEach(c=>{
 });
 
 const slideshow = document.getElementById('slideshow');
-const slideCaption = document.getElementById('slideCaption');
 const slideDots = document.getElementById('slideDots');
-let currentImg = null;
+let currentSlide = null;
 let dotIndex = 0;
 const DOT_COUNT = 5;
 for(let i=0;i<DOT_COUNT;i++){
@@ -388,20 +392,35 @@ for(let i=0;i<DOT_COUNT;i++){
 
 function nextSlide(){
   const pick = imagePool[Math.floor(Math.random()*imagePool.length)];
+
+  const slide = document.createElement('div');
+  slide.className = 'slide';
+
   const img = document.createElement('img');
   img.src = drv(pick.id);
-  slideshow.insertBefore(img, slideshow.firstChild);
-  requestAnimationFrame(()=> img.classList.add('active'));
-  slideCaption.textContent = pick.cat;
+  slide.appendChild(img);
+
+  const cap = document.createElement('div');
+  cap.className = 'slide-caption';
+  cap.textContent = pick.cat;
+  slide.appendChild(cap);
+
+  slideshow.appendChild(slide);
+
+  // force layout so the initial transform (off-screen right) is applied before animating in
+  void slide.offsetWidth;
+  requestAnimationFrame(()=> slide.classList.add('active'));
 
   [...slideDots.children].forEach((d,i)=> d.classList.toggle('on', i===dotIndex));
   dotIndex = (dotIndex+1) % DOT_COUNT;
 
-  if(currentImg){
-    const old = currentImg;
-    setTimeout(()=>{ old.classList.remove('active'); setTimeout(()=>old.remove(), 1100); }, 3000);
+  if(currentSlide){
+    const old = currentSlide;
+    old.classList.remove('active');
+    old.classList.add('exit');
+    setTimeout(()=> old.remove(), 950);
   }
-  currentImg = img;
+  currentSlide = slide;
 }
 nextSlide();
 setInterval(nextSlide, 4000);
