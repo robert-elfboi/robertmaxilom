@@ -55,10 +55,15 @@
   .roles span:not(:last-child)::after{content:'  ·  ';}
 
   .slideshow{
-    width:100%; max-width:1200px; margin:48px auto 0;
+    width:100vw;
+    margin-left:calc(50% - 50vw);
+    margin-top:48px;
     height:min(1080px, 72vh);
-    border:1px solid var(--line-strong);
-    position:relative; overflow:hidden; background:#fafafa;
+    position:relative; overflow:hidden; background:transparent;
+  }
+  .slide-ui{
+    position:absolute; inset:0; z-index:5;
+    max-width:1200px; margin:0 auto; pointer-events:none;
   }
   .slide{
     position:absolute; inset:0;
@@ -69,7 +74,7 @@
   .slide.active{transform:translateX(0);}
   .slide.exit{transform:translateX(-100%);}
   .slide img{
-    max-width:100%; max-height:100%; width:auto; height:auto;
+    max-width:92%; max-height:100%; width:auto; height:auto;
     object-fit:contain; display:block;
   }
   .slide .slide-caption{
@@ -195,16 +200,18 @@
 
 <section class="hero">
   <div>
-    <h1>Bringing ideas to life<br>through art and design.</h1>
-    <p class="tagline">A working archive of graphic design, photo editing, illustration, and layout pulled straight from the studio drive.</p>
+    <h1>Design that reads<br>the room.</h1>
+    <p class="tagline">A working archive of graphic design, photo editing, illustration, and layout — pulled straight from the studio drive.</p>
     <div class="roles">
       <span>GRAPHIC DESIGN</span><span>PHOTO EDITING</span><span>ILLUSTRATION</span><span>LAYOUT</span>
     </div>
   </div>
 
   <div class="slideshow" id="slideshow">
-    <div class="slide-live">Playing random work</div>
-    <div class="slide-dots" id="slideDots"></div>
+    <div class="slide-ui">
+      <div class="slide-live">Playing random work</div>
+      <div class="slide-dots" id="slideDots"></div>
+    </div>
   </div>
 </section>
 
